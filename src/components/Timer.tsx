@@ -2,11 +2,12 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { formatTime } from "../utils";
 import { Progress } from "antd";
+import { useAppThemeContext } from "../context/app-theme-provider";
 
 const StyledOuterCircle = styled.div`
   width: 21rem;
   height: 21rem;
-  background-color: #121063;
+  background-color: ${(props) => props.theme.bgDark};
   color: white;
   margin: 1rem auto;
   border-radius: 50%;
@@ -14,18 +15,6 @@ const StyledOuterCircle = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
-// export interface StyledInnerCircleProps {
-//   readonly widthPercent: number;
-// }
-//
-// const StyledInnerCircle = styled(StyledOuterCircle)<StyledInnerCircleProps>`
-//   // height: ${(props) => props.widthPercent}%;
-//   height: 88%;
-//   width: 88%;
-//   flex-direction: column;
-//   border: 0.65rem solid tomato;
-// `;
 
 const StyledTime = styled.h1`
   font-size: 4.75rem;
@@ -46,36 +35,52 @@ const StyledPauseButton = styled.button`
   text-transform: uppercase;
 
   &:hover {
-    background: tomato;
+    background: ${(props) => props.theme.primaryColor};
     border-radius: 0.7rem;
     padding: 0.4rem 0.9rem;
   }
 `;
 
-function Timer({ startingTime = 2 * 60 }: { startingTime: number }) {
-  const [remainingTime, setRemainingTime] = useState(startingTime);
+function Timer({
+  startingTimeInSecs = 2 * 60,
+}: {
+  startingTimeInSecs: number;
+}) {
+  const [remainingTime, setRemainingTime] = useState(startingTimeInSecs);
+  const [paused, setPaused] = useState(false);
+  const {
+    theme: { primaryColor },
+  } = useAppThemeContext();
 
   useEffect(() => {
-    const intervalId = window.setInterval(() => {
-      setRemainingTime((time) => (time > 0 ? time - 1 : 0));
-    }, 1000);
+    if (!paused) {
+      const intervalId = window.setInterval(() => {
+        setRemainingTime((time) => (time > 0 ? time - 1 : 0));
+      }, 1000);
 
-    return () => clearInterval(intervalId);
-  }, []);
+      return () => window.clearInterval(intervalId);
+    }
+  }, [paused]);
+
+  function togglePause(): void {
+    setPaused((state) => !state);
+  }
 
   return (
     <StyledOuterCircle>
       <Progress
         type="circle"
-        percent={(1 - remainingTime / startingTime) * 100}
+        percent={(1 - remainingTime / startingTimeInSecs) * 100}
         format={() => (
           <>
             <StyledTime>{formatTime(remainingTime)}</StyledTime>
-            <StyledPauseButton>Pause</StyledPauseButton>
+            <StyledPauseButton onClick={togglePause}>
+              {paused ? "Resume" : "Pause"}
+            </StyledPauseButton>
           </>
         )}
         width={290}
-        strokeColor="tomato"
+        strokeColor={primaryColor}
         trailColor="#121063"
         strokeWidth={3}
       />

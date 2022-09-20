@@ -1,3 +1,5 @@
+import { Timers } from "../types";
+
 export function formatTime(timeInSecs: number): string {
   const mins = Math.floor(timeInSecs / 60);
   const secs = Math.floor(timeInSecs % 60);
@@ -7,4 +9,8 @@ export function formatTime(timeInSecs: number): string {
 
 export function padWitZero(num: number): string {
   return num < 10 ? `0${num}` : `${num}`;
+}
+
+export function getActiveTimerClass(active: Timers, current: Timers) {
+  return active === current ? "active" : "";
 }

@@ -1,14 +1,12 @@
 import "./App.css";
 import { Options, SettingsButton, Timer } from "./components";
-import styled, { createGlobalStyle, DefaultTheme } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
+import { useAppContext } from "./context/app-context";
 
-interface GlobalStyleProps {
-  readonly currentTheme: keyof DefaultTheme;
-}
-
-const GlobalStyle = createGlobalStyle<GlobalStyleProps>`
+const GlobalStyle = createGlobalStyle`
   body {
-    font-family: ${(props) => props.theme[props.currentTheme]};
+    font-family: ${(props) => props.theme.font};
+    background-color: ${(props) => props.theme.bg};
   }
 `;
 
@@ -23,16 +21,22 @@ const Container = styled.section`
 
 const Heading = styled.h1`
   color: #f3f4f6ff;
+  font-size: 2.7rem;
 `;
 
 function App() {
+  const { state } = useAppContext();
+
   return (
     <>
-      <GlobalStyle currentTheme="tomato" />
+      <GlobalStyle />
       <Container>
         <Heading>pomodoro</Heading>
         <Options />
-        <Timer />
+        <Timer
+          startingTimeInSecs={state[state.activeTimer]}
+          key={state.activeTimer}
+        />
         <SettingsButton />
       </Container>
     </>

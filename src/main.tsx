@@ -1,21 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { DefaultTheme, ThemeProvider } from "styled-components";
 import App from "./App";
-import 'antd/dist/antd.css';
-import "./index.css";
+import { AppProvider } from "./context/app-context";
+import { AppThemeProvider } from "./context/app-theme-provider";
 
-const theme: DefaultTheme = {
-  tomato: {
-    primaryColor: "tomato",
-    font: '"Times New Roman", sans-serif',
-  },
-};
+import "antd/dist/antd.css";
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    <AppThemeProvider>
+      <AppProvider>
+        <App />
+      </AppProvider>
+    </AppThemeProvider>
   </React.StrictMode>
 );
