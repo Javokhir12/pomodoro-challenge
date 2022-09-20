@@ -1,1 +1,1 @@
-# Pomodoro app build with React, TS, Styled Components and Ant Design.
+# Pomodoro app built with React, TS, Styled Components and Ant Design.
