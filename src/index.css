@@ -1,0 +1,9 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: #312e81;
+  font-family: "Times New Roman", sans-serif;
+  overflow: hidden;
+}
