@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useAppContext } from "../context/app-context";
-import { Timers } from "../types";
+import { NotificationType, Timers } from "../types";
 import { setCurrentTimer } from "../context/actions";
-import { getActiveTimerClass } from "../utils";
+import { getActiveTimerClass, openNotificationWithIcon } from "../utils";
 
 const ListContainer = styled.ul`
   list-style: none;
@@ -40,8 +40,14 @@ function Options() {
     state: { activeTimer },
   } = useAppContext();
 
-  const handleTimerChange = (timer: Timers) => {
+  const handleTimerChange = (
+    timer: Timers,
+    type: NotificationType,
+    title: string,
+    description: string = ""
+  ) => {
     dispatch(setCurrentTimer(timer));
+    openNotificationWithIcon(type, title, description);
   };
 
   return (
@@ -50,7 +56,9 @@ function Options() {
         <button
           type="button"
           className={getActiveTimerClass(activeTimer, Timers.POMODORO)}
-          onClick={() => handleTimerChange(Timers.POMODORO)}
+          onClick={() =>
+            handleTimerChange(Timers.POMODORO, "info", "Time to focus!")
+          }
         >
           pomodoro
         </button>
@@ -59,7 +67,13 @@ function Options() {
         <button
           type="button"
           className={getActiveTimerClass(activeTimer, Timers.SHORT_BREAK)}
-          onClick={() => handleTimerChange(Timers.SHORT_BREAK)}
+          onClick={() =>
+            handleTimerChange(
+              Timers.SHORT_BREAK,
+              "success",
+              "Time for a break!"
+            )
+          }
         >
           short break
         </button>
@@ -68,7 +82,9 @@ function Options() {
         <button
           type="button"
           className={getActiveTimerClass(activeTimer, Timers.LONG_BREAK)}
-          onClick={() => handleTimerChange(Timers.LONG_BREAK)}
+          onClick={() =>
+            handleTimerChange(Timers.LONG_BREAK, "success", "Time for a break!")
+          }
         >
           long break
         </button>

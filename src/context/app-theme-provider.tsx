@@ -32,7 +32,9 @@ export function useAppThemeContext() {
   const ctx = useContext(AppThemeContext);
 
   if (ctx === undefined)
-    throw new Error("useAppContext must be inside a Provider with a value");
+    throw new Error(
+      "useAppThemeContext must be inside a Provider with a value"
+    );
 
   return ctx;
 }
