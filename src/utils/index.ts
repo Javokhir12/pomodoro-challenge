@@ -1,5 +1,5 @@
-import { Timers, NotificationType } from "../types";
 import { notification } from "antd";
+import { Timers, NotificationType } from "../types";
 
 export function formatTime(timeInSecs: number): string {
   const mins = Math.floor(timeInSecs / 60);

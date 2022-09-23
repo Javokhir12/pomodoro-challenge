@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { formatTime } from "../utils";
 import { Progress } from "antd";
 import { useAppThemeContext } from "../context/app-theme-provider";
+import { useAppContext } from "../context/app-context";
+import { setTimerStatus } from "../context/actions";
 
 const StyledOuterCircle = styled.div`
   width: 21rem;
@@ -47,10 +49,11 @@ function Timer({
   startingTimeInSecs: number;
 }) {
   const [remainingTime, setRemainingTime] = useState(startingTimeInSecs);
-  const [paused, setPaused] = useState(false);
+  const [paused, setPaused] = useState(true);
   const {
     theme: { primaryColor },
   } = useAppThemeContext();
+  const { dispatch } = useAppContext();
 
   useEffect(() => {
     if (!paused) {
@@ -58,8 +61,12 @@ function Timer({
         setRemainingTime((time) => (time > 0 ? time - 1 : 0));
       }, 1000);
 
+      dispatch(setTimerStatus(true));
+
       return () => window.clearInterval(intervalId);
     }
+
+    dispatch(setTimerStatus(false));
   }, [paused]);
 
   function togglePause(): void {
@@ -75,7 +82,7 @@ function Timer({
           <>
             <StyledTime>{formatTime(remainingTime)}</StyledTime>
             <StyledPauseButton onClick={togglePause}>
-              {paused ? "Resume" : "Pause"}
+              {paused ? "Start" : "Stop"}
             </StyledPauseButton>
           </>
         )}
